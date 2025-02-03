@@ -29,7 +29,7 @@ mltu==1.0.0
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
+git clone https://github.com/BhuwanShrestha187/Handwritten-Letter-Recognition.git
 cd Handwritten-Word-Recognition
 ```
 
