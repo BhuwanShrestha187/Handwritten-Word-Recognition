@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\Conestoga College\6th Semester\1. Systems Project\Main Project\Handwritten Recognition System\venv
+set VIRTUAL_ENV=D:\Conestoga College\Final System Project\Handwritten-Word-Recognition\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
