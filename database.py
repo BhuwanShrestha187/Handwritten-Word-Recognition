@@ -1,3 +1,11 @@
+'''
+    Filename: database.py
+    Author: Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev Patel
+    Date: 2025-04-01
+    Project: Handwritten OCR | Capstone Project 2025
+    Course: Systems Project
+    Description: This is the database module for the Handwritten OCR project.
+'''
 import sqlite3
 
 def init_db():

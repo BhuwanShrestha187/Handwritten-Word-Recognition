@@ -1,3 +1,19 @@
+'''
+    Filename: vision_api.py
+    Author: Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev Patel
+    Date: 2025-04-01
+    Project: Handwritten OCR | Capstone Project 2025
+    Course: Systems Project
+    Description: This is the vision API for the Handwritten OCR project.
+'''
+
+
+'''
+    References: We have used the Google Vision API to extract text from images. The API is free to use and has a limit of 1000 requests per user. 
+    The link to the API is given below: 
+    - https://cloud.google.com/vision/docs/ocr
+    - https://cloud.google.com/vision/docs/reference/rest/v1/images/annotate
+'''
 import os
 from google.cloud import vision
 import io

@@ -1,3 +1,12 @@
+/*
+    Filename: script.js
+    Author: Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev Patel
+    Date: 2025-04-01
+    Project: Handwritten OCR | Capstone Project 2025
+    Course: Systems Project
+    Description: This is the main JavaScript file for the Handwritten OCR project.
+*/
+
 function copyToClipboard(textareaId) {
     const textarea = document.getElementById(textareaId);
     textarea.select();

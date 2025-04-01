@@ -1,3 +1,13 @@
+'''
+    Filename: app.py
+    Author: Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev Patel
+    Date: 2025-04-01
+    Project: Handwritten OCR | Capstone Project 2025
+    Course: Systems Project
+    Description: This is the main application file for the Handwritten OCR project.
+'''
+
+
 from flask import Flask, request, render_template, redirect, url_for, send_file, jsonify, session, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.utils import secure_filename
@@ -50,7 +60,7 @@ login_manager.login_view = "login"
 login_manager.login_message = ""
 
 # Google OAuth setup (placeholder)
-GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"  # Replace with your Google Client ID
+GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"  
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 class User(UserMixin):

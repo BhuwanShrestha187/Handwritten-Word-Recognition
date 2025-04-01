@@ -1,74 +1,85 @@
+/*
+    Filename: style.css
+    Author: Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev Patel
+    Date: 2025-04-01
+    Project: Handwritten OCR | Capstone Project 2025
+    Course: Systems Project
+    Description: This is the main CSS file for the Handwritten OCR project.
+*/
+
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    transition: background-color 0.3s, color 0.3s;
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 body.light-mode {
-    background-color: #f4f4f9;
-    color: #333;
+  background-color: #f4f4f9;
+  color: #333;
 }
 
 body.dark-mode {
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .box {
-    border: 2px solid #000;
-    padding: 20px;
-    margin: 10px 0;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border: 2px solid #000;
+  padding: 20px;
+  margin: 10px 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .box {
-    background: #2a2a2a;
-    border-color: #555;
+  background: #2a2a2a;
+  border-color: #555;
 }
 
-button, input[type="submit"] {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
+button,
+input[type="submit"] {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-button:hover, input[type="submit"]:hover {
-    background: #0056b3;
+button:hover,
+input[type="submit"]:hover {
+  background: #0056b3;
 }
 
 textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 nav {
-    background: #007bff;
-    padding: 10px 0;
-    margin-bottom: 20px;
+  background: #007bff;
+  padding: 10px 0;
+  margin-bottom: 20px;
 }
 
 nav a {
-    color: #fff;
-    margin: 0 15px;
-    text-decoration: none;
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
 }
 
 .dark-mode nav {
-    background: #003087;
+  background: #003087;
 }
