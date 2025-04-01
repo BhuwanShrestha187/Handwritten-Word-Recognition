@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History - Handwritten OCR</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lora:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --dark-bg: #2b2b2b;
+        --light-bg: #f4ece6;
+        --accent: #a68a64;
+        --text-dark: #d4c9b0;
+        --text-light: #4a3f35;
+        --blend-color: #eceeea;
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+
+      body {
+        font-family: "Lora", serif;
+        background: linear-gradient(
+          to bottom,
+          var(--light-bg),
+          var(--blend-color)
+        );
+        color: var(--text-light);
+        transition: all 0.3s ease;
+        overflow-x: hidden;
+      }
+      body.dark-mode {
+        background: linear-gradient(135deg, var(--dark-bg), #3e3e3e);
+        color: var(--text-dark);
+      }
+
+      /* Navbar */
+      nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 1.75rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-height: 80px;
+      }
+      body.dark-mode nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      nav a,
+      nav button {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: var(--text-light);
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      body.dark-mode nav a,
+      body.dark-mode nav button {
+        color: var(--text-dark);
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Header Section */
+      .header-section {
+        padding: 4rem 0;
+        text-align: center;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      body.dark-mode h1 {
+        color: var(--text-dark);
+      }
+      p.subtitle {
+        font-size: 1.125rem;
+        max-width: 700px;
+        margin: 0 auto;
+        color: var(--text-light);
+      }
+      body.dark-mode p.subtitle {
+        color: var(--text-dark);
+      }
+
+      /* Result Card */
+      .result-card {
+        background: rgba(236, 238, 234, 0.9);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+        margin-bottom: 2rem;
+      }
+      body.dark-mode .result-card {
+        background: rgba(50, 50, 50, 0.9);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .result-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      body.dark-mode .result-card:hover {
+        box-shadow: 0 8px 16px rgba(236, 238, 234, 0.3);
+      }
+
+      /* Buttons */
+      .button {
+        padding: 0.75rem 2rem;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-family: "Lora", serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.5rem;
+      }
+      body.dark-mode .button {
+        background: var(--blend-color);
+        color: var(--dark-bg);
+      }
+      .button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px var(--shadow);
+      }
+
+      /* Expandable Details */
+      .details {
+        display: none;
+        margin-top: 1rem;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      body.dark-mode .details {
+        background-color: rgba(60, 60, 60, 0.7);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-dark);
+      }
+
+      /* Footer */
+      footer {
+        background: linear-gradient(
+          to top,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 2rem;
+        margin-top: 6rem;
+        position: relative;
+        text-align: center;
+      }
+      footer::before {
+        content: "";
+        position: absolute;
+        top: -2rem;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--accent),
+          transparent
+        );
+      }
+      body.dark-mode footer {
+        background: linear-gradient(
+          to top,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+      }
+      body.dark-mode footer::before {
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--blend-color),
+          transparent
+        );
+      }
+      footer a {
+        color: var(--accent);
+        margin: 0 1rem;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        text-decoration: none;
+      }
+      body.dark-mode footer a {
+        color: var(--blend-color);
+      }
+      footer a:hover {
+        color: var(--accent);
+      }
+      footer a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--accent);
+        transition: width 0.3s ease;
+      }
+      body.dark-mode footer a::after {
+        background-color: var(--blend-color);
+      }
+      footer a:hover::after {
+        width: 100%;
+      }
+      footer a i {
+        transition: transform 0.5s ease;
+      }
+      footer a:hover i {
+        animation: rotate 1s linear infinite;
+      }
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <!-- Navigation Bar -->
+    <nav class="text-white">
+      <div class="container flex justify-between items-center">
+        <a href="{{ url_for('upload_file') }}" class="text-xl"
+          ><i class="fas fa-pen-nib"></i> Handwritten Text Recognition</a
+        >
+        <div class="flex items-center space-x-6">
+          <a href="{{ url_for('upload_file') }}"
+            ><i class="fas fa-home"></i> Home</a
+          >
+          <a href="{{ url_for('history') }}"
+            ><i class="fas fa-history"></i> History</a
+          >
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-envelope"></i> Contact</a
+          >
+          <a href="{{ url_for('references') }}"
+            ><i class="fas fa-code"></i> References</a
+          >
+          <a href="{{ url_for('settings') }}"
+            ><i class="fas fa-cog"></i> Settings</a
+          >
+          <a href="{{ url_for('logout') }}"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
+          <button id="themeToggle" class="focus:outline-none">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="header-section container">
+      <h1><i class="fas fa-history"></i> History</h1>
+      <p class="text-sm mb-2">View your past uploads and extracted text</p>
+      <p class="subtitle">
+        Browse, search, and manage your previous records below.
+      </p>
+    </div>
+
+    <!-- History Controls -->
+    <div class="container mb-6">
+      <div class="flex flex-col md:flex-row gap-4 mb-4">
+        <form action="/search_history" method="get" class="flex-1">
+          <input
+            type="text"
+            name="query"
+            placeholder="Search by timestamp or text..."
+            class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button type="submit" class="button mt-2 md:mt-0 md:ml-2">
+            <i class="fas fa-search mr-2"></i> Search
+          </button>
+        </form>
+        <select
+          id="sort"
+          class="p-2 border rounded-lg bg-white dark:bg-gray-700 h-10"
+          style="max-width: 160px"
+          onchange="sortHistory()"
+        >
+          <option value="desc">Sort by Newest</option>
+          <option value="asc">Sort by Oldest</option>
+        </select>
+        <form
+          action="/clear_history"
+          method="post"
+          onsubmit="return confirm('Are you sure you want to clear all history? This action cannot be undone.')"
+          class="mt-2 md:mt-0"
+        >
+          <button type="submit" class="button">
+            <i class="fas fa-trash mr-2"></i> Clear History
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- History Records Section -->
+    <div class="container" id="history-container">
+      {% for record in records %}
+      <div class="result-card mb-6" data-timestamp="{{ record[2] }}">
+        <h3 class="text-xl font-bold mb-4">Record from {{ record[2] }}</h3>
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/3">
+            <img
+              src="{{ url_for('static', filename='uploads/' + record[0]) }}"
+              alt="Uploaded Image"
+              class="w-full rounded-lg"
+            />
+          </div>
+          <div class="md:w-2/3">
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {{ record[1] | safe }}
+            </p>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <form action="/download_history" method="post" class="inline">
+                <input type="hidden" name="filename" value="{{ record[0] }}" />
+                <input type="hidden" name="text" value="{{ record[1] }}" />
+                <button type="submit" class="button">
+                  <i class="fas fa-download mr-2"></i> Download
+                </button>
+              </form>
+              <button
+                onclick="toggleDetails('details-{{ loop.index }}')"
+                class="button"
+              >
+                <i class="fas fa-info-circle mr-2"></i> View Details
+              </button>
+            </div>
+            <div id="details-{{ loop.index }}" class="details">
+              <p><strong>Original Filename:</strong> N/A</p>
+              <!-- Hardcoded default since tuple doesn't support this -->
+              <p><strong>File Size:</strong> N/A KB</p>
+              <!-- Hardcoded default since tuple doesn't support this -->
+              <p><strong>Processing Time:</strong> N/A seconds</p>
+              <!-- Hardcoded default since tuple doesn't support this -->
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p class="font-bold"><i class="fas fa-pen-nib"></i> Handwritten OCR</p>
+        <div class="flex flex-wrap justify-center gap-6 mt-4">
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="https://facebook.com" target="_blank"
+            ><i class="fab fa-facebook"></i> Facebook</a
+          >
+          <a href="https://github.com" target="_blank"
+            ><i class="fab fa-github"></i> GitHub</a
+          >
+          <a href="https://instagram.com" target="_blank"
+            ><i class="fab fa-instagram"></i> Instagram</a
+          >
+          <a href="https://twitter.com" target="_blank"
+            ><i class="fab fa-twitter"></i> Twitter</a
+          >
+          <a
+            href="/cdn-cgi/l/email-protection#d5e6e0e5e5fae7e1d5fdf4fbf1e2e7fce1e1f0fbfaf6e7bbf6faf8"
+            ><i class="fas fa-envelope"></i> Gmail</a
+          >
+          <a href="https://linkedin.com" target="_blank"
+            ><i class="fab fa-linkedin"></i> LinkedIn</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-phone"></i> Contact Us</a
+          >
+        </div>
+        <p class="text-sm mt-4">
+          Developed by Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev
+          Patel.<br />© 2025 Handwritten OCR. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script
+      data-cfasync="false"
+      src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+    ></script>
+    <script>
+      // Theme Toggle
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        body.classList.toggle("dark-mode");
+        themeToggle.querySelector("i").classList.toggle("fa-sun");
+        themeToggle.querySelector("i").classList.toggle("fa-moon");
+      });
+
+      // Toggle Details
+      function toggleDetails(id) {
+        const details = document.getElementById(id);
+        if (details.style.display === "block") {
+          details.style.display = "none";
+        } else {
+          details.style.display = "block";
+        }
+      }
+
+      // Sort History
+      function sortHistory() {
+        const sortValue = document.getElementById("sort").value;
+        const container = document.getElementById("history-container");
+        const cards = Array.from(
+          container.getElementsByClassName("result-card")
+        );
+
+        cards.sort((a, b) => {
+          const timeA = new Date(a.getAttribute("data-timestamp"));
+          const timeB = new Date(b.getAttribute("data-timestamp"));
+          return sortValue === "desc" ? timeB - timeA : timeA - timeB;
+        });
+
+        // Re-append sorted cards
+        cards.forEach((card) => container.appendChild(card));
+      }
+
+      // Initial load sort
+      document.addEventListener("DOMContentLoaded", () => {
+        sortHistory(); // Sort by newest by default on page load
+      });
+    </script>
+  </body>
+</html>

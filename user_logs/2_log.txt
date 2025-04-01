@@ -1,0 +1,105 @@
+2025-03-31 19:31:08 - Viewed Settings Page
+2025-03-31 19:31:08 - Viewed Active Sessions
+2025-03-31 19:31:11 - Activity Log Downloaded
+2025-03-31 19:31:20 - Viewed History
+2025-03-31 19:31:31 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 19:31:35 - File Downloaded - Format: txt, Filename: asdas
+2025-03-31 19:31:37 - Viewed Settings Page
+2025-03-31 19:31:37 - Viewed Active Sessions
+2025-03-31 19:31:39 - Activity Log Downloaded
+2025-03-31 19:33:20 - Viewed Settings Page
+2025-03-31 19:33:20 - Viewed Active Sessions
+2025-03-31 19:33:26 - Logout - IP: 127.0.0.1
+2025-03-31 19:34:13 - Login - IP: 127.0.0.1
+2025-03-31 19:34:14 - Viewed Settings Page
+2025-03-31 19:34:14 - Viewed Active Sessions
+2025-03-31 19:34:20 - 2FA Setting Changed - Enabled: True
+2025-03-31 19:34:22 - Analytics Setting Changed - Enabled: True
+2025-03-31 19:34:25 - Analytics Setting Changed - Enabled: False
+2025-03-31 19:34:25 - Analytics Setting Changed - Enabled: True
+2025-03-31 19:34:27 - Language Setting Changed - Language: es
+2025-03-31 19:34:28 - Notifications Setting Changed - Enabled: True
+2025-03-31 19:34:33 - Activity Log Downloaded
+2025-03-31 19:34:41 - Viewed Settings Page
+2025-03-31 19:34:41 - Viewed Active Sessions
+2025-03-31 19:34:43 - Viewed References Page
+2025-03-31 19:34:45 - Viewed Contact Page
+2025-03-31 19:34:52 - Viewed About Page
+2025-03-31 19:34:56 - Logout - IP: 127.0.0.1
+2025-03-31 19:47:11 - Login - IP: 127.0.0.1
+2025-03-31 19:47:14 - Logout - IP: 127.0.0.1
+2025-03-31 20:18:06 - Login - IP: 127.0.0.1
+2025-03-31 20:18:08 - Viewed References Page
+2025-03-31 20:18:09 - Viewed Contact Page
+2025-03-31 20:18:09 - Viewed About Page
+2025-03-31 20:18:09 - Viewed History
+2025-03-31 20:18:10 - Viewed Settings Page
+2025-03-31 20:18:10 - Viewed Active Sessions
+2025-03-31 20:18:11 - Viewed References Page
+2025-03-31 20:18:12 - Viewed Contact Page
+2025-03-31 20:18:16 - Contact Form Submitted - Email: bhuwanshrestha187@gmail.com
+2025-03-31 20:19:35 - Viewed Contact Page
+2025-03-31 20:19:41 - Contact Form Submitted - Email: bhuwanshrestha187@gmail.com
+2025-03-31 20:28:28 - Login - IP: 127.0.0.1
+2025-03-31 20:28:30 - Viewed References Page
+2025-03-31 20:28:30 - Viewed Contact Page
+2025-03-31 20:28:37 - Contact Form Submitted - Email: bhuwanshrestha187@gmail.com
+2025-03-31 20:28:49 - Viewed Settings Page
+2025-03-31 20:28:49 - Viewed Active Sessions
+2025-03-31 20:28:50 - Activity Log Downloaded
+2025-03-31 20:29:14 - Viewed Contact Page
+2025-03-31 20:29:21 - Contact Form Submitted - Email: sp8868760@gmail.com
+2025-03-31 20:29:33 - Viewed Contact Page
+2025-03-31 20:29:42 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:31:12 - Viewed Contact Page
+2025-03-31 20:31:20 - Contact Form Submitted - Email: b@gmail.com
+2025-03-31 20:31:52 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:33:12 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:33:26 - Rating Submitted - Rating: 5/5 stars
+2025-03-31 20:34:33 - Viewed Settings Page
+2025-03-31 20:34:33 - Viewed Active Sessions
+2025-03-31 20:34:35 - Activity Log Downloaded
+2025-03-31 20:35:52 - Language Setting Changed - Language: fr
+2025-03-31 20:35:54 - 2FA Setting Changed - Enabled: False
+2025-03-31 20:35:55 - 2FA Setting Changed - Enabled: True
+2025-03-31 20:35:56 - 2FA Setting Changed - Enabled: False
+2025-03-31 20:35:56 - 2FA Setting Changed - Enabled: True
+2025-03-31 20:35:57 - Analytics Setting Changed - Enabled: False
+2025-03-31 20:35:58 - 2FA Setting Changed - Enabled: False
+2025-03-31 20:35:58 - 2FA Setting Changed - Enabled: True
+2025-03-31 20:36:02 - 2FA Setting Changed - Enabled: False
+2025-03-31 20:36:02 - 2FA Setting Changed - Enabled: True
+2025-03-31 20:36:04 - 2FA Setting Changed - Enabled: False
+2025-03-31 20:36:08 - Notifications Setting Changed - Enabled: False
+2025-03-31 20:36:09 - Language Setting Changed - Language: es
+2025-03-31 20:36:38 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:36:47 - Rating Submitted - Rating: 5/5 stars
+2025-03-31 20:38:29 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:38:42 - Rating Submitted - Rating: 5/5 stars
+2025-03-31 20:39:26 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:39:34 - Rating Submitted - Rating: 4/5 stars
+2025-03-31 20:40:06 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:40:15 - Rating Submitted - Rating: 3/5 stars
+2025-03-31 20:41:27 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 20:41:36 - Rating Submitted - Rating: 5/5 stars
+2025-03-31 20:42:30 - Logout - IP: 127.0.0.1
+2025-03-31 20:45:20 - Login - IP: 127.0.0.1
+2025-03-31 20:45:23 - Viewed History
+2025-03-31 20:46:31 - Viewed History
+2025-03-31 20:46:47 - Viewed History
+2025-03-31 20:46:51 - Viewed References Page
+2025-03-31 20:46:53 - Viewed Settings Page
+2025-03-31 20:46:53 - Viewed Active Sessions
+2025-03-31 20:46:55 - Viewed Contact Page
+2025-03-31 20:46:56 - Viewed History
+2025-03-31 20:46:56 - Viewed About Page
+2025-03-31 20:48:59 - Viewed About Page
+2025-03-31 20:50:37 - Viewed About Page
+2025-03-31 20:52:00 - Viewed About Page
+2025-03-31 20:52:56 - Viewed History
+2025-03-31 20:52:57 - Viewed About Page
+2025-03-31 20:53:02 - Viewed Contact Page
+2025-03-31 20:53:23 - Viewed References Page
+2025-03-31 20:53:25 - Viewed Settings Page
+2025-03-31 20:53:25 - Viewed Active Sessions
+2025-03-31 20:55:25 - Logout - IP: 127.0.0.1

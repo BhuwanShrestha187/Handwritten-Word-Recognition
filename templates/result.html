@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results - Handwritten OCR</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lora:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <style>
+      :root {
+        --dark-bg: #2b2b2b;
+        --light-bg: #f4ece6;
+        --accent: #a68a64;
+        --text-dark: #d4c9b0;
+        --text-light: #4a3f35;
+        --blend-color: #eceeea;
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+
+      body {
+        font-family: "Lora", serif;
+        background: linear-gradient(
+          to bottom,
+          var(--light-bg),
+          var(--blend-color)
+        );
+        color: var(--text-light);
+        transition: all 0.3s ease;
+        overflow-x: hidden;
+      }
+      body.dark-mode {
+        background: linear-gradient(135deg, var(--dark-bg), #3e3e3e);
+        color: var(--text-dark);
+      }
+
+      /* Navbar */
+      nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 1.75rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-height: 80px;
+      }
+      body.dark-mode nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      nav a,
+      nav button {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: var(--text-light);
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      body.dark-mode nav a,
+      body.dark-mode nav button {
+        color: var(--text-dark);
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Header Section */
+      .header-section {
+        padding: 4rem 0;
+        text-align: center;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.75rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      body.dark-mode h1 {
+        color: var(--text-dark);
+      }
+      p.subtitle {
+        font-size: 1.125rem;
+        max-width: 700px;
+        margin: 0 auto;
+        color: var(--text-light);
+      }
+      body.dark-mode p.subtitle {
+        color: var(--text-dark);
+      }
+
+      /* Result Card */
+      .result-card {
+        background: rgba(236, 238, 234, 0.9);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+        margin-bottom: 2rem;
+      }
+      body.dark-mode .result-card {
+        background: rgba(50, 50, 50, 0.9);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .result-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      body.dark-mode .result-card:hover {
+        box-shadow: 0 8px 16px rgba(236, 238, 234, 0.3);
+      }
+
+      /* Buttons */
+      .button {
+        padding: 0.75rem 2rem;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-family: "Lora", serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.5rem;
+        position: relative;
+      }
+      body.dark-mode .button {
+        background: var(--blend-color);
+        color: var(--dark-bg);
+      }
+      .button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px var(--shadow);
+      }
+
+      /* Copy Notification */
+      .copy-notification {
+        position: absolute;
+        right: -2.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 50%;
+        font-size: 0.875rem;
+        display: none;
+        animation: fadeInOut 2s ease-in-out;
+      }
+      body.dark-mode .copy-notification {
+        background-color: #2e7d32;
+      }
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* Translated Text Box */
+      .translated-text-box {
+        background-color: #ffffff;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      body.dark-mode .translated-text-box {
+        background-color: rgba(60, 60, 60, 0.7);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-dark);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      }
+
+      /* CKEditor Custom Styles */
+      .ck-editor__editable {
+        min-height: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      body.dark-mode .ck-editor__editable {
+        background: rgba(60, 60, 60, 0.7);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-dark);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      }
+      .ck-editor__editable:focus {
+        border-color: var(--blend-color);
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+      body.dark-mode .ck-editor__editable:focus {
+        border-color: var(--text-dark);
+        box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.2);
+      }
+      .ck-editor__editable:empty::before {
+        content: "Start typing or edit the extracted text here...";
+        color: #9ca3af;
+      }
+
+      /* Progress Bar */
+      .progress-container {
+        width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        margin-top: 1rem;
+        display: none;
+      }
+      .progress-bar {
+        height: 20px;
+        width: 0%;
+        background-color: var(--accent);
+        border-radius: 5px;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+        transition: width 0.1s ease;
+      }
+      body.dark-mode .progress-bar {
+        background-color: var(--blend-color);
+      }
+
+      /* Feedback Message */
+      .feedback-message {
+        display: none;
+        margin-top: 1rem;
+        padding: 1rem;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+        text-align: center;
+      }
+      body.dark-mode .feedback-message {
+        background-color: #2e7d32;
+        color: #d4edda;
+        border: 1px solid #4caf50;
+      }
+
+      /* Footer */
+      footer {
+        background: linear-gradient(
+          to top,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 2rem;
+        margin-top: 6rem;
+        position: relative;
+        text-align: center;
+      }
+      footer::before {
+        content: "";
+        position: absolute;
+        top: -2rem;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--accent),
+          transparent
+        );
+      }
+      body.dark-mode footer {
+        background: linear-gradient(
+          to top,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+      }
+      body.dark-mode footer::before {
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--blend-color),
+          transparent
+        );
+      }
+      footer a {
+        color: var(--accent);
+        margin: 0 1rem;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        text-decoration: none;
+      }
+      body.dark-mode footer a {
+        color: var(--blend-color);
+      }
+      footer a:hover {
+        color: var(--accent);
+      }
+      footer a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--accent);
+        transition: width 0.3s ease;
+      }
+      body.dark-mode footer a::after {
+        background-color: var(--blend-color);
+      }
+      footer a:hover::after {
+        width: 100%;
+      }
+      footer a i {
+        transition: transform 0.5s ease;
+      }
+      footer a:hover i {
+        animation: rotate 1s linear infinite;
+      }
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Star Rating Styles */
+      .star-container {
+        display: flex;
+        gap: 5px;
+      }
+
+      .star {
+        color: #cccccc;
+        font-size: 2.5rem;
+        transition: color 0.2s ease;
+        cursor: pointer;
+      }
+
+      .star.selected {
+        color: #ffd700;
+      }
+
+      .star:hover {
+        color: #ffd700;
+      }
+
+      .star:hover ~ .star {
+        color: #cccccc;
+      }
+
+      .star-container:hover .star {
+        color: #ffd700;
+      }
+
+      .star-container .star:hover ~ .star {
+        color: #cccccc;
+      }
+
+      /* Dark mode adjustments */
+      body.dark-mode .star {
+        color: #555555;
+      }
+
+      body.dark-mode .star.selected {
+        color: #ffd700;
+      }
+
+      /* Feedback Message */
+      .feedback-message {
+        display: none;
+      }
+
+      /* Progress Container */
+      .progress-container {
+        display: none;
+        width: 100%;
+        height: 20px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      body.dark-mode .progress-container {
+        background-color: #444444;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--accent);
+        border-radius: 10px;
+        width: 0%;
+        text-align: center;
+        color: white;
+        font-size: 0.8rem;
+        line-height: 20px;
+        transition: width 0.2s ease;
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <!-- Navigation Bar -->
+    <nav class="text-white">
+      <div class="container flex justify-between items-center">
+        <a href="{{ url_for('upload_file') }}" class="text-xl"
+          ><i class="fas fa-pen-nib"></i> Handwritten Text Recognition</a
+        >
+        <div class="flex items-center space-x-6">
+          <a href="{{ url_for('upload_file') }}"
+            ><i class="fas fa-home"></i> Home</a
+          >
+          <a href="{{ url_for('history') }}"
+            ><i class="fas fa-history"></i> History</a
+          >
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-envelope"></i> Contact</a
+          >
+          <a href="{{ url_for('references') }}"
+            ><i class="fas fa-code"></i> References</a
+          >
+          <a href="{{ url_for('settings') }}"
+            ><i class="fas fa-cog"></i> Settings</a
+          >
+          <a href="{{ url_for('logout') }}"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
+          <button id="themeToggle" class="focus:outline-none">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="header-section container">
+      <h1><i class="fas fa-pen-alt"></i> Extracted Results</h1>
+      <p class="text-sm mb-2">View and edit your results below</p>
+      <p class="subtitle">
+        Modify the extracted text using the editor and translate or download as
+        needed.
+      </p>
+    </div>
+
+    <!-- Results Section -->
+    <div class="container">
+      <!-- Uploaded Image -->
+      <div class="result-card mb-6">
+        <h3 class="text-xl font-bold mb-4">Uploaded Image</h3>
+        {% for result in results %}
+        <img
+          src="{{ url_for('static', filename='uploads/' + result.image) }}"
+          alt="Uploaded Image"
+          class="w-full rounded-lg"
+        />
+        {% endfor %}
+      </div>
+
+      <!-- Extracted Text (Editor) with Copy and Download -->
+      <div class="result-card mb-6">
+        <h3 class="text-xl font-bold mb-4">Extracted Text</h3>
+        <div id="editor-1" class="mb-4">
+          <div id="text-1" class="ck-editor__editable_inline">
+            {% for result in results %}
+            <p>{{ result.text | safe }}</p>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3 mb-4">
+          <button onclick="copyToClipboard('text-1')" class="button relative">
+            <i class="fas fa-copy mr-2"></i> Copy Extracted Text
+            <span id="copy-notification-extracted" class="copy-notification"
+              ><i class="fas fa-check"></i
+            ></span>
+          </button>
+        </div>
+        <form action="/download" method="post" class="flex flex-wrap gap-3">
+          <input
+            type="hidden"
+            name="text"
+            id="hidden-text-1"
+            value="{% for result in results %}{{ result.text }}{% endfor %}"
+          />
+          <input
+            type="text"
+            name="filename"
+            placeholder="Enter filename"
+            required
+            class="p-2 border rounded-lg flex-1 bg-white dark:bg-gray-700"
+          />
+          <select
+            name="format"
+            class="p-2 border rounded-lg bg-white dark:bg-gray-700"
+          >
+            <option value="txt">Text</option>
+            <option value="docx">Word</option>
+            <option value="pdf">PDF</option>
+          </select>
+          <button type="submit" class="button">
+            <i class="fas fa-download mr-2"></i> Download Extracted Text
+          </button>
+        </form>
+      </div>
+
+      <!-- Translation Block -->
+      <div class="result-card mb-6">
+        <h3 class="text-3xl font-bold mb-4">Translation</h3>
+        <p class="text-lg text-gray-600 mb-4 dark:text-gray-300">
+          Wanna translate that extracted text? No problem—just hit "Translate"
+          and watch the magic happen. Because obviously you don't need to brush
+          up on your Spanish when our handy tool can do it for you, right?
+          You're welcome.
+        </p>
+        <div class="mb-4">
+          <div class="flex space-x-3 mb-4">
+            <select
+              name="language"
+              id="language-1"
+              class="p-2 border rounded-lg bg-white dark:bg-gray-700"
+            >
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="hi">Hindi</option>
+              <option value="ne">Nepali</option>
+              <option value="de">German</option>
+              <option value="zh-cn">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+              <option value="ar">Arabic</option>
+              <option value="ru">Russian</option>
+              <option value="it">Italian</option>
+              <option value="pt">Portuguese</option>
+              <option value="tr">Turkish</option>
+              <option value="nl">Dutch</option>
+              <option value="pl">Polish</option>
+              <option value="sv">Swedish</option>
+              <option value="id">Indonesian</option>
+              <option value="vi">Vietnamese</option>
+              <option value="th">Thai</option>
+            </select>
+            <button
+              onclick="translateText('text-1', 'language-1', 'translated-text-1')"
+              class="button"
+            >
+              <i class="fas fa-language mr-2"></i> Translate
+            </button>
+          </div>
+          <div id="translate-progress" class="progress-container">
+            <div id="translate-progress-bar" class="progress-bar">0%</div>
+          </div>
+          <div class="flex flex-wrap gap-3 mb-4">
+            <button
+              onclick="copyToClipboard('translated-text-1')"
+              class="button relative"
+            >
+              <i class="fas fa-copy mr-2"></i> Copy Translated Text
+              <span id="copy-notification-translated" class="copy-notification"
+                ><i class="fas fa-check"></i
+              ></span>
+            </button>
+          </div>
+          <div
+            id="translated-text-1"
+            class="translated-text-box text-gray-700 dark:text-gray-300 leading-relaxed"
+          ></div>
+          <!-- Save Translated Text -->
+          <form
+            action="/download"
+            method="post"
+            class="mt-4 flex flex-wrap gap-3"
+          >
+            <input type="hidden" name="text" id="hidden-translated-text-1" />
+            <input
+              type="text"
+              name="filename"
+              placeholder="Enter filename"
+              required
+              class="p-2 border rounded-lg flex-1 bg-white dark:bg-gray-700"
+            />
+            <select
+              name="format"
+              class="p-2 border rounded-lg bg-white dark:bg-gray-700"
+            >
+              <option value="txt">Text</option>
+              <option value="docx">Word</option>
+              <option value="pdf">PDF</option>
+            </select>
+            <button type="submit" class="button">
+              <i class="fas fa-download mr-2"></i> Save Translated Text
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Feedback Section -->
+      <div class="result-card">
+        <h3 class="text-3xl font-bold mb-4">Feedback</h3>
+        <p class="text-lg text-gray-600 mb-4 dark:text-gray-300">
+          Not happy with the results? Or maybe you just want to show off your
+          editing skills? Go ahead and rate our tool below and let us know what
+          you think!
+        </p>
+        <div class="star-rating mb-4">
+          <span class="text-lg font-semibold"
+            >How would you rate your experience?</span
+          >
+          <div class="flex items-center mt-2">
+            <div class="star-container flex gap-2">
+              <span class="star cursor-pointer text-4xl" data-rating="1"
+                >★</span
+              >
+              <span class="star cursor-pointer text-4xl" data-rating="2"
+                >★</span
+              >
+              <span class="star cursor-pointer text-4xl" data-rating="3"
+                >★</span
+              >
+              <span class="star cursor-pointer text-4xl" data-rating="4"
+                >★</span
+              >
+              <span class="star cursor-pointer text-4xl" data-rating="5"
+                >★</span
+              >
+            </div>
+            <span id="selected-rating" class="ml-4 text-lg font-bold"></span>
+          </div>
+        </div>
+        <form id="feedback-form" class="space-y-4">
+          <input type="hidden" id="rating-value" name="rating" value="0" />
+          <textarea
+            name="comment"
+            id="feedback-comment"
+            placeholder="Additional comments (optional)"
+            class="w-full p-3 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+          <button type="button" onclick="submitRating()" class="button">
+            <i class="fas fa-paper-plane mr-2"></i> Submit Rating
+          </button>
+        </form>
+        <div id="feedback-progress" class="progress-container">
+          <div id="feedback-progress-bar" class="progress-bar">0%</div>
+        </div>
+        <div
+          id="feedback-message"
+          class="feedback-message mt-4 py-2 px-4 bg-green-100 text-green-700 rounded-lg hidden"
+        >
+          Thank you for your feedback!
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p class="font-bold"><i class="fas fa-pen-nib"></i> Handwritten OCR</p>
+        <div class="flex flex-wrap justify-center gap-6 mt-4">
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="https://facebook.com" target="_blank"
+            ><i class="fab fa-facebook"></i> Facebook</a
+          >
+          <a href="https://github.com" target="_blank"
+            ><i class="fab fa-github"></i> GitHub</a
+          >
+          <a href="https://instagram.com" target="_blank"
+            ><i class="fab fa-instagram"></i> Instagram</a
+          >
+          <a href="https://twitter.com" target="_blank"
+            ><i class="fab fa-twitter"></i> Twitter</a
+          >
+          <a
+            href="/cdn-cgi/l/email-protection#d5e6e0e5e5fae7e1d5fdf4fbf1e2e7fce1e1f0fbfaf6e7bbf6faf8"
+            ><i class="fas fa-envelope"></i> Gmail</a
+          >
+          <a href="https://linkedin.com" target="_blank"
+            ><i class="fab fa-linkedin"></i> LinkedIn</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-phone"></i> Contact Us</a
+          >
+        </div>
+        <p class="text-sm mt-4">
+          Developed by Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev
+          Patel.<br />© 2025 Handwritten OCR. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script
+      data-cfasync="false"
+      src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+    ></script>
+    <script>
+      // Theme Toggle
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        body.classList.toggle("dark-mode");
+        themeToggle.querySelector("i").classList.toggle("fa-sun");
+        themeToggle.querySelector("i").classList.toggle("fa-moon");
+      });
+
+      // Initialize all event listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        ClassicEditor.create(document.querySelector("#text-1"), {
+          toolbar: [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "subscript",
+            "superscript",
+            "|",
+            "alignment",
+            "fontFamily",
+            "fontSize",
+            "fontColor",
+            "fontBackgroundColor",
+            "|",
+            "link",
+            "imageUpload",
+            "mediaEmbed",
+            "insertTable",
+            "codeBlock",
+            "highlight",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "todoList",
+            "blockQuote",
+            "outdent",
+            "indent",
+            "|",
+            "undo",
+            "redo",
+          ],
+          height: "300px",
+        })
+          .then((editor) => {
+            window.editor1 = editor;
+          })
+          .catch((error) => {
+            console.error("CKEditor initialization error:", error);
+          });
+
+        // Initialize star rating
+        initStarRating();
+      });
+
+      // Star rating functionality
+      function initStarRating() {
+        const stars = document.querySelectorAll(".star");
+        const ratingInput = document.getElementById("rating-value");
+        const selectedRating = document.getElementById("selected-rating");
+
+        stars.forEach((star) => {
+          star.addEventListener("click", function () {
+            const rating = this.getAttribute("data-rating");
+            ratingInput.value = rating;
+
+            // Update visual state
+            stars.forEach((s) => {
+              if (s.getAttribute("data-rating") <= rating) {
+                s.classList.add("selected");
+              } else {
+                s.classList.remove("selected");
+              }
+            });
+
+            // Update text
+            selectedRating.textContent = rating + " out of 5 stars";
+          });
+        });
+      }
+
+      function submitRating() {
+        const ratingValue = document.getElementById("rating-value").value;
+        const comment = document.getElementById("feedback-comment").value;
+        const progressContainer = document.getElementById("feedback-progress");
+        const progressBar = document.getElementById("feedback-progress-bar");
+        const feedbackMessage = document.getElementById("feedback-message");
+
+        if (ratingValue === "0") {
+          alert("Please select a rating by clicking on the stars.");
+          return;
+        }
+
+        // Show progress bar and simulate progress
+        progressContainer.style.display = "block";
+        let progress = 0;
+        const interval = setInterval(() => {
+          if (progress < 100) {
+            progress += 10;
+            progressBar.style.width = progress + "%";
+            progressBar.textContent = progress + "%";
+          } else {
+            clearInterval(interval);
+
+            // Prepare data for submission
+            const feedbackData = {
+              rating: ratingValue,
+              comment: comment,
+            };
+
+            // Send rating to server
+            fetch("/submit_rating", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(feedbackData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Hide progress bar
+                progressContainer.style.display = "none";
+
+                // Show success message
+                feedbackMessage.textContent =
+                  "Thank you for your " + ratingValue + "-star rating!";
+                feedbackMessage.style.display = "block";
+
+                // Reset form but keep stars highlighted
+                document.getElementById("feedback-comment").value = "";
+              })
+              .catch((error) => {
+                console.error("Error submitting rating:", error);
+                progressContainer.style.display = "none";
+                feedbackMessage.textContent =
+                  "Error submitting your rating. Please try again.";
+                feedbackMessage.style.display = "block";
+                feedbackMessage.className =
+                  "feedback-message mt-4 py-2 px-4 bg-red-100 text-red-700 rounded-lg";
+              });
+          }
+        }, 200);
+      }
+
+      function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        const notificationId =
+          elementId === "text-1"
+            ? "copy-notification-extracted"
+            : "copy-notification-translated";
+        const notification = document.getElementById(notificationId);
+
+        if (element) {
+          let text = "";
+          if (element.classList.contains("ck-editor__editable")) {
+            const editor = window["editor1"];
+            text = editor
+              .getData()
+              .replace(/<br>/g, "\n")
+              .replace(/<\/?p>/g, "");
+          } else {
+            text = element.innerText || element.value;
+          }
+          if (text.trim() === "") {
+            console.log("No text to copy! Please translate the text first.");
+            return;
+          }
+          if (navigator.clipboard) {
+            navigator.clipboard
+              .writeText(text)
+              .then(() => {
+                // Show notification
+                notification.style.display = "block";
+                setTimeout(() => {
+                  notification.style.display = "none";
+                }, 2000);
+              })
+              .catch((err) => {
+                console.error("Failed to copy text using clipboard API: ", err);
+                fallbackCopyText(text, notification);
+              });
+          } else {
+            fallbackCopyText(text, notification);
+          }
+        } else {
+          console.error("Element not found: ", elementId);
+        }
+      }
+
+      function fallbackCopyText(text, notification) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand("copy");
+          // Show notification
+          notification.style.display = "block";
+          setTimeout(() => {
+            notification.style.display = "none";
+          }, 2000);
+        } catch (err) {
+          console.error("Fallback copy failed: ", err);
+        }
+        document.body.removeChild(textArea);
+      }
+
+      function translateText(sourceId, langId, targetId) {
+        const sourceElement = document.getElementById(sourceId);
+        const langSelect = document.getElementById(langId);
+        const targetElement = document.getElementById(targetId);
+        const progressContainer = document.getElementById("translate-progress");
+        const progressBar = document.getElementById("translate-progress-bar");
+        const hiddenTranslatedText = document.getElementById(
+          "hidden-translated-text-1"
+        );
+
+        if (sourceElement && langSelect && targetElement) {
+          // Show progress bar and simulate progress
+          progressContainer.style.display = "block";
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + "%";
+            progressBar.textContent = progress + "%";
+            if (progress >= 100) {
+              clearInterval(interval);
+              progressContainer.style.display = "none";
+              progressBar.style.width = "0%";
+              progressBar.textContent = "0%";
+
+              // Perform translation
+              const editor = window["editor1"];
+              const text = editor
+                .getData()
+                .replace(/<br>/g, "\n")
+                .replace(/<\/?p>/g, "");
+              fetch("/translate", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `text=${encodeURIComponent(text)}&language=${
+                  langSelect.value
+                }`,
+              })
+                .then((response) => response.text())
+                .then((translated) => {
+                  targetElement.innerHTML = translated.replace(/\n/g, "<br>");
+                  // Update hidden input for saving translated text
+                  hiddenTranslatedText.value = translated.replace(/\n/g, " ");
+                })
+                .catch((error) => console.error("Translation error:", error));
+            }
+          }, 200);
+        }
+      }
+
+      // Update hidden input with edited text before form submission
+      document.querySelectorAll("form").forEach((form) => {
+        form.addEventListener("submit", (e) => {
+          const textDivId = "text-1";
+          if (textDivId && form.id !== "feedback-form") {
+            const editor = window["editor1"];
+            const hiddenInput = form.querySelector('input[name="text"]');
+            if (editor && hiddenInput) {
+              if (hiddenInput.id === "hidden-text-1") {
+                hiddenInput.value = editor
+                  .getData()
+                  .replace(/<br>/g, "\n")
+                  .replace(/<\/?p>/g, "");
+              }
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

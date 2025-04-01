@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Handwritten OCR</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lora:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --dark-bg: #2b2b2b;
+        --light-bg: #f4ece6;
+        --accent: #a68a64;
+        --text-dark: #d4c9b0;
+        --text-light: #4a3f35;
+        --blend-color: #eceeea;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --card-bg: rgba(236, 238, 234, 0.9);
+        --card-bg-dark: rgba(50, 50, 50, 0.9);
+      }
+
+      body {
+        font-family: "Lora", serif;
+        background: linear-gradient(
+          to bottom,
+          var(--light-bg),
+          var(--blend-color)
+        );
+        color: var(--text-light);
+        transition: all 0.3s ease;
+        overflow-x: hidden;
+      }
+
+      body.dark-mode {
+        background: linear-gradient(135deg, var(--dark-bg), #3e3e3e);
+        color: var(--text-dark);
+      }
+
+      /* Navbar */
+      nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 1.75rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-height: 80px;
+      }
+
+      body.dark-mode nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+
+      nav a,
+      nav button {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: var(--text-light);
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      body.dark-mode nav a,
+      body.dark-mode nav button {
+        color: var(--text-dark);
+      }
+
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Header Section */
+      .header-section {
+        padding: 4rem 0 2rem;
+        text-align: center;
+      }
+
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.75rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #514339;
+      }
+
+      body.dark-mode h1 {
+        color: var(--text-dark);
+      }
+
+      p.subtitle {
+        font-size: 1.25rem;
+        max-width: 700px;
+        margin: 0 auto;
+        color: #514339;
+      }
+
+      body.dark-mode p.subtitle {
+        color: var(--text-dark);
+      }
+
+      /* Contact Card */
+      .card {
+        background: rgba(244, 244, 244, 0.85);
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.02);
+        transition: transform 0.3s ease;
+      }
+
+      body.dark-mode .card {
+        background: var(--card-bg-dark);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .card h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.7rem;
+        color: #514339;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+      }
+
+      body.dark-mode .card h2 {
+        color: var(--text-dark);
+      }
+
+      /* Contact Info Styling */
+      .contact-info p {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        color: #514339;
+        font-size: 1.1rem;
+      }
+
+      .contact-info i {
+        color: var(--accent);
+        width: 24px;
+      }
+
+      .contact-info a {
+        color: #a68a64;
+        transition: color 0.3s ease;
+        text-decoration: none;
+      }
+
+      body.dark-mode .contact-info a {
+        color: var(--blend-color);
+      }
+
+      .contact-info a:hover {
+        color: #776246;
+      }
+
+      body.dark-mode .contact-info a:hover {
+        color: var(--text-dark);
+      }
+
+      /* Form Styling */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #514339;
+        font-size: 1.1rem;
+      }
+
+      body.dark-mode label {
+        color: var(--text-dark);
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.9rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.9);
+        font-family: "Lora", serif;
+        font-size: 1rem;
+      }
+
+      body.dark-mode input,
+      body.dark-mode textarea {
+        background: rgba(60, 60, 60, 0.7);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-dark);
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #a68a64;
+      }
+
+      body.dark-mode input:focus,
+      body.dark-mode textarea:focus {
+        border-color: var(--text-dark);
+      }
+
+      button.submit-btn {
+        padding: 0.75rem 2rem;
+        background: #a68a64;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-family: "Lora", serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 1rem;
+      }
+
+      body.dark-mode button.submit-btn {
+        background: var(--blend-color);
+        color: var(--dark-bg);
+      }
+
+      button.submit-btn:hover {
+        background: #876f53;
+      }
+
+      body.dark-mode button.submit-btn:hover {
+        background: #d1d7d0;
+      }
+
+      /* Map Section */
+      .map-container {
+        height: 300px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+      }
+
+      /* FAQ Section */
+      .faq-item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.2rem 0;
+      }
+
+      body.dark-mode .faq-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .faq-question {
+        font-family: "Playfair Display", serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #514339;
+        cursor: pointer;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: color 0.3s ease;
+      }
+
+      body.dark-mode .faq-question {
+        color: var(--text-dark);
+      }
+
+      .faq-question:hover {
+        color: var(--accent);
+      }
+
+      .faq-question i {
+        transition: transform 0.3s ease;
+      }
+
+      .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+      }
+
+      .faq-answer {
+        display: none;
+        padding: 0.5rem 1rem;
+        color: #514339;
+        line-height: 1.6;
+      }
+
+      body.dark-mode .faq-answer {
+        color: var(--text-dark);
+      }
+
+      .faq-item.active .faq-answer {
+        display: block;
+      }
+
+      /* Sending Progress and Thank You Animation */
+      .progress-container {
+        display: none;
+        text-align: center;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .thank-you-message {
+        display: none;
+        text-align: center;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background-color: #d4edda;
+        color: #155724;
+        border-radius: 6px;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      body.dark-mode .thank-you-message {
+        background-color: #155724;
+        color: #d4edda;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Footer */
+      footer {
+        background: linear-gradient(
+          to top,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 2rem;
+        margin-top: 6rem;
+        position: relative;
+        text-align: center;
+      }
+
+      footer::before {
+        content: "";
+        position: absolute;
+        top: -2rem;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--accent),
+          transparent
+        );
+      }
+
+      body.dark-mode footer {
+        background: linear-gradient(
+          to top,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+      }
+
+      body.dark-mode footer::before {
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--blend-color),
+          transparent
+        );
+      }
+
+      footer a {
+        color: var(--accent);
+        margin: 0 1rem;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        text-decoration: none;
+      }
+
+      body.dark-mode footer a {
+        color: var(--blend-color);
+      }
+
+      footer a:hover {
+        color: var(--accent);
+      }
+
+      footer a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--accent);
+        transition: width 0.3s ease;
+      }
+
+      body.dark-mode footer a::after {
+        background-color: var(--blend-color);
+      }
+
+      footer a:hover::after {
+        width: 100%;
+      }
+
+      .footer-brand {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #514339;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .footer-copyright {
+        color: black;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <!-- Navigation Bar -->
+    <nav class="text-white">
+      <div class="container flex justify-between items-center">
+        <a href="{{ url_for('upload_file') }}" class="text-xl"
+          ><i class="fas fa-pen-nib"></i> Handwritten Text Recognition</a
+        >
+        <div class="flex items-center space-x-6">
+          <a href="{{ url_for('upload_file') }}"
+            ><i class="fas fa-home"></i> Home</a
+          >
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('history') }}"
+            ><i class="fas fa-history"></i> History</a
+          >
+          {% endif %}
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-envelope"></i> Contact</a
+          >
+          <a href="{{ url_for('references') }}"
+            ><i class="fas fa-code"></i> References</a
+          >
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('settings') }}"
+            ><i class="fas fa-cog"></i> Settings</a
+          >
+          <a href="{{ url_for('logout') }}"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
+          {% else %}
+          <a href="{{ url_for('login') }}"
+            ><i class="fas fa-sign-in-alt"></i> Login</a
+          >
+          {% endif %}
+          <button id="themeToggle" class="focus:outline-none">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="header-section container">
+      <h1>Contact Us</h1>
+      <p class="subtitle">
+        We're here to help! Get in touch with us for support or inquiries.
+      </p>
+    </div>
+
+    <!-- Introduction Paragraph -->
+    <div class="container max-w-4xl mx-auto">
+      <div class="card">
+        <p>
+          At Handwritten OCR, we value your feedback and are committed to
+          providing the best support. Whether you have a question or need
+          assistance, our team is just a message away!
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="container max-w-4xl mx-auto">
+      <div class="card contact-info">
+        <h2>Contact Information</h2>
+        <p><i class="fas fa-envelope"></i> handwrittenocr448@gmail.com</p>
+        <p><i class="fas fa-phone"></i> +1-234-567-890</p>
+        <p><i class="fab fa-twitter"></i> @handwrittenocr</p>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="container max-w-4xl mx-auto">
+      <div class="card">
+        <h2>Send Us a Message</h2>
+        <div id="progressContainer" class="progress-container">
+          Sending... <span id="progressText">0%</span>
+        </div>
+        <div id="thankYouMessage" class="thank-you-message">
+          Thank you, your message has been sent successfully!
+        </div>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="submit-btn">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="container max-w-4xl mx-auto">
+      <div class="card p-0 overflow-hidden">
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2895.8366646876147!2d-80.52040968443453!3d43.46425797912725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882bf4a6d6f4e4d7%3A0x9f2b7e5e5c2e4b8e!2sWaterloo%2C%20ON%2C%20Canada!5e0!3m2!1sen!2sus!4v1602458645894!5m2!1sen!2sus"
+            width="100%"
+            height="100%"
+            style="border: 0"
+            allowfullscreen=""
+            aria-hidden="false"
+            tabindex="0"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="container max-w-4xl mx-auto">
+      <div class="card">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+          <h3 class="faq-question">
+            How long does it take to get a response?
+            <i class="fas fa-chevron-down"></i>
+          </h3>
+          <p class="faq-answer">
+            We typically respond within 24-48 hours. For urgent inquiries,
+            please call us directly.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">
+            Can I request a feature for Handwritten OCR?
+            <i class="fas fa-chevron-down"></i>
+          </h3>
+          <p class="faq-answer">
+            Absolutely! We love hearing your ideas. Use the form above to share
+            your suggestions.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-question">
+            Is my data secure when I contact you?
+            <i class="fas fa-chevron-down"></i>
+          </h3>
+          <p class="faq-answer">
+            Yes, we use industry-standard encryption to protect your
+            information.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-brand">
+          <i class="fas fa-pen-nib mr-2"></i> Handwritten OCR
+        </div>
+        <div class="flex flex-wrap justify-center gap-6 mt-4">
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="https://facebook.com" target="_blank"
+            ><i class="fab fa-facebook"></i> Facebook</a
+          >
+          <a href="https://github.com" target="_blank"
+            ><i class="fab fa-github"></i> GitHub</a
+          >
+          <a href="https://instagram.com" target="_blank"
+            ><i class="fab fa-instagram"></i> Instagram</a
+          >
+          <a href="https://twitter.com" target="_blank"
+            ><i class="fab fa-twitter"></i> Twitter</a
+          >
+          <a href="mailto:support@handwrittenocr.com"
+            ><i class="fas fa-envelope"></i> Gmail</a
+          >
+          <a href="https://linkedin.com" target="_blank"
+            ><i class="fab fa-linkedin"></i> LinkedIn</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-phone"></i> Contact Us</a
+          >
+        </div>
+        <div class="footer-copyright">
+          Developed by Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev
+          Patel.<br />
+          © 2025 Handwritten OCR. All Rights Reserved.
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript for Theme Toggle, Form Submission, FAQ Accordion -->
+    <script>
+      // Theme Toggle
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        body.classList.toggle("dark-mode");
+        themeToggle.querySelector("i").classList.toggle("fa-sun");
+        themeToggle.querySelector("i").classList.toggle("fa-moon");
+      });
+
+      // Form Submission with Progress and Thank You
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const progressContainer =
+            document.getElementById("progressContainer");
+          const progressText = document.getElementById("progressText");
+          const thankYouMessage = document.getElementById("thankYouMessage");
+
+          // Get form data
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const message = document.getElementById("message").value;
+
+          // Show progress container
+          progressContainer.style.display = "block";
+          let progress = 0;
+          const interval = setInterval(() => {
+            if (progress < 100) {
+              progress += 10;
+              progressText.textContent = `${progress}%`;
+            } else {
+              clearInterval(interval);
+            }
+          }, 200);
+
+          // Send data to the server
+          fetch("/feedback", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: name,
+              email: email,
+              message: message,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              progressContainer.style.display = "none";
+
+              if (data.success) {
+                thankYouMessage.textContent = data.message;
+                thankYouMessage.style.display = "block";
+                document.getElementById("contactForm").reset(); // Reset the form
+
+                setTimeout(() => {
+                  thankYouMessage.style.display = "none";
+                }, 3000); // Hide after 3 seconds
+              } else {
+                thankYouMessage.textContent = data.message;
+                thankYouMessage.className =
+                  "thank-you-message bg-red-100 text-red-800";
+                thankYouMessage.style.display = "block";
+
+                setTimeout(() => {
+                  thankYouMessage.style.display = "none";
+                  thankYouMessage.className = "thank-you-message"; // Reset class
+                }, 5000); // Hide after 5 seconds for error messages
+              }
+            })
+            .catch((error) => {
+              progressContainer.style.display = "none";
+              thankYouMessage.textContent =
+                "An error occurred. Please try again later.";
+              thankYouMessage.className =
+                "thank-you-message bg-red-100 text-red-800";
+              thankYouMessage.style.display = "block";
+
+              setTimeout(() => {
+                thankYouMessage.style.display = "none";
+                thankYouMessage.className = "thank-you-message"; // Reset class
+              }, 5000);
+              console.error("Error:", error);
+            });
+        });
+
+      // FAQ Accordion
+      const faqQuestions = document.querySelectorAll(".faq-question");
+      faqQuestions.forEach((question) => {
+        question.addEventListener("click", () => {
+          const item = question.parentElement;
+          item.classList.toggle("active");
+        });
+      });
+    </script>
+  </body>
+</html>

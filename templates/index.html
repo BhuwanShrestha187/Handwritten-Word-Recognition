@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handwritten OCR</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lora:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --dark-bg: #2b2b2b;
+        --light-bg: #f4ece6;
+        --accent: #a68a64;
+        --text-dark: #d4c9b0;
+        --text-light: #4a3f35;
+        --blend-color: #eceeea;
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+
+      body {
+        font-family: "Lora", serif;
+        background: linear-gradient(
+          to bottom,
+          var(--light-bg),
+          var(--blend-color)
+        );
+        color: var(--text-light);
+        transition: all 0.3s ease;
+        overflow-x: hidden;
+      }
+      body.dark-mode {
+        background: linear-gradient(135deg, var(--dark-bg), #3e3e3e);
+        color: var(--text-dark);
+      }
+
+      /* Navbar */
+      nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 1.75rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-height: 80px;
+      }
+      body.dark-mode nav {
+        background: linear-gradient(
+          to bottom,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      nav a,
+      nav button {
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: var(--text-light);
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      body.dark-mode nav a,
+      body.dark-mode nav button {
+        color: var(--text-dark);
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Header Section */
+      .header-section {
+        padding: 4rem 0;
+        text-align: center;
+      }
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.75rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+      }
+      body.dark-mode h1 {
+        color: var(--text-dark);
+      }
+      p.subtitle {
+        font-size: 1.125rem;
+        max-width: 700px;
+        margin: 0 auto;
+        color: var(--text-light);
+      }
+      body.dark-mode p.subtitle {
+        color: var(--text-dark);
+      }
+
+      /* Upload Section */
+      .upload-section {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      body.dark-mode .upload-section {
+        background: rgba(50, 50, 50, 0.9);
+        box-shadow: 0 4px 15px var(--shadow);
+      }
+      .upload-section:hover {
+        transform: translateY(-5px);
+      }
+      .drop-zone {
+        border: 3px dashed var(--accent);
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      body.dark-mode .drop-zone {
+        background: transparent;
+      }
+      .drop-zone.dragover {
+        border-color: var(--blend-color);
+        background: rgba(244, 236, 230, 0.8);
+      }
+      body.dark-mode .drop-zone.dragover {
+        background: rgba(74, 74, 74, 0.8);
+      }
+      .drop-zone i {
+        color: var(--accent);
+      }
+      .drop-zone p {
+        color: var(--text-light);
+      }
+      body.dark-mode .drop-zone p {
+        color: var(--text-dark);
+      }
+      #uploadTip {
+        color: var(--text-light);
+      }
+      body.dark-mode #uploadTip {
+        color: var(--text-dark);
+      }
+      #uploadTip i {
+        color: var(--accent);
+      }
+
+      /* Buttons */
+      .button {
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-family: "Lora", serif;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      #uploadButton {
+        background: linear-gradient(45deg, var(--accent), var(--blend-color));
+        color: #2b2b2b;
+      }
+      #cancelButton {
+        background: linear-gradient(45deg, #4a4a4a, #6b7280);
+        color: var(--text-dark);
+      }
+      body.light-mode #uploadButton,
+      body.light-mode #cancelButton {
+        color: var(--text-light);
+      }
+      .button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px var(--shadow);
+      }
+
+      /* Progress Bar */
+      .progress-container {
+        position: relative;
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        margin-top: 8px;
+      }
+      .progress-bar {
+        height: 100%;
+        background: var(--accent);
+        width: 0%;
+        transition: width 0.3s ease;
+        border-radius: 2px;
+      }
+      body.dark-mode .progress-bar {
+        background: var(--blend-color);
+      }
+      .progress-text {
+        position: absolute;
+        right: 0;
+        top: -20px;
+        font-size: 0.75rem;
+        color: var(--text-light);
+      }
+      body.dark-mode .progress-text {
+        color: var(--text-dark);
+      }
+
+      /* How-To and Features Sections */
+      .section {
+        padding: 4rem 0;
+      }
+      .feature-card {
+        background: rgba(236, 238, 234, 0.9);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+          inset 0 2px 2px rgba(255, 255, 255, 0.3);
+        /* Added shadow-type border */
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      body.dark-mode .feature-card {
+        background: rgba(50, 50, 50, 0.9);
+        box-shadow: 0 2px 4px var(--shadow),
+          inset 0 2px 2px rgba(74, 74, 74, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+      }
+      .feature-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
+          inset 0 4px 4px rgba(255, 255, 285, 0.4);
+      }
+      body.dark-mode .feature-card:hover {
+        box-shadow: 0 8px 20px rgba(236, 238, 234, 0.3),
+          inset 0 4px 4px rgba(74, 74, 74, 0.4);
+      }
+      .feature-icon {
+        transition: transform 0.5s ease;
+      }
+      .feature-card:hover .feature-icon {
+        animation: rotate 1s linear infinite;
+      }
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Footer */
+      footer {
+        background: linear-gradient(
+          to top,
+          rgba(236, 238, 234, 0.95),
+          rgba(236, 238, 234, 0.7)
+        );
+        padding: 2rem;
+        margin-top: 6rem;
+        position: relative;
+        text-align: center;
+      }
+      footer::before {
+        content: "";
+        position: absolute;
+        top: -2rem;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--accent),
+          transparent
+        );
+      }
+      body.dark-mode footer {
+        background: linear-gradient(
+          to top,
+          rgba(40, 40, 40, 0.95),
+          rgba(40, 40, 40, 0.7)
+        );
+      }
+      body.dark-mode footer::before {
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--blend-color),
+          transparent
+        );
+      }
+      footer a {
+        color: var(--accent);
+        margin: 0 1rem;
+        transition: color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        text-decoration: none;
+      }
+      body.dark-mode footer a {
+        color: var(--blend-color);
+      }
+      footer a:hover {
+        color: var(--accent);
+      }
+      footer a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--accent);
+        transition: width 0.3s ease;
+      }
+      body.dark-mode footer a::after {
+        background-color: var(--blend-color);
+      }
+      footer a:hover::after {
+        width: 100%;
+      }
+      footer a i {
+        transition: transform 0.5s ease;
+      }
+      footer a:hover i {
+        animation: rotate 1s linear infinite;
+      }
+
+      /* Testimonials Section */
+      .testimonial-card {
+        background: rgba(236, 238, 234, 0.9);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+          inset 0 2px 2px rgba(255, 255, 255, 0.3);
+      }
+      body.dark-mode .testimonial-card {
+        background: rgba(50, 50, 50, 0.9);
+        box-shadow: 0 2px 4px var(--shadow),
+          inset 0 2px 2px rgba(74, 74, 74, 0.3);
+      }
+      .testimonial-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
+          inset 0 4px 4px rgba(255, 255, 255, 0.4);
+      }
+      body.dark-mode .testimonial-card:hover {
+        box-shadow: 0 8px 20px rgba(236, 238, 234, 0.3),
+          inset 0 4px 4px rgba(74, 74, 74, 0.4);
+      }
+
+      /* FAQ Section */
+      .faq-item {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+          inset 0 2px 2px rgba(255, 255, 255, 0.3);
+        border-left: 4px solid var(--accent);
+        position: relative;
+      }
+      body.dark-mode .faq-item {
+        background: rgba(60, 60, 60, 0.95);
+        box-shadow: 0 2px 6px var(--shadow),
+          inset 0 2px 2px rgba(74, 74, 74, 0.3);
+        border-left: 4px solid var(--blend-color);
+      }
+      .faq-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
+          inset 0 4px 4px rgba(255, 255, 255, 0.4);
+      }
+      body.dark-mode .faq-item:hover {
+        box-shadow: 0 4px 12px rgba(236, 238, 234, 0.3),
+          inset 0 4px 4px rgba(74, 74, 74, 0.4);
+      }
+      .faq-answer {
+        display: none;
+        margin-top: 1rem;
+        color: var(--text-light);
+      }
+      body.dark-mode .faq-answer {
+        color: var(--text-dark);
+      }
+      .faq-arrow {
+        position: absolute;
+        right: 1rem;
+        transition: transform 0.3s ease;
+      }
+      .faq-item.active .faq-arrow {
+        transform: rotate(180deg);
+      }
+
+      /* CTA Banner */
+      .cta-banner {
+        background: linear-gradient(45deg, var(--accent), var(--blend-color));
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin: 4rem auto;
+        max-width: 800px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+      body.dark-mode .cta-banner {
+        background: linear-gradient(45deg, #3e3e3e, var(--dark-bg));
+      }
+
+      /* Fullscreen Overlay */
+      #fullscreenOverlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #closeFullscreenButton {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      #closeFullscreenButton:hover {
+        background: rgba(0, 0, 0, 0.7);
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <!-- Navigation Bar -->
+    <nav class="text-white">
+      <div class="container flex justify-between items-center">
+        <a href="{{ url_for('upload_file') }}" class="text-xl"
+          ><i class="fas fa-pen-nib"></i> Handwritten Text Recognition</a
+        >
+        <div class="flex items-center space-x-6">
+          <a href="{{ url_for('upload_file') }}"
+            ><i class="fas fa-home"></i> Home</a
+          >
+          <a href="{{ url_for('history') }}"
+            ><i class="fas fa-history"></i> History</a
+          >
+          <a href="{{ url_for('about') }}"
+            ><i class="fas fa-info-circle"></i> About</a
+          >
+          <a href="{{ url_for('contact') }}"
+            ><i class="fas fa-envelope"></i> Contact</a
+          >
+          <a href="{{ url_for('references') }}"
+            ><i class="fas fa-code"></i> References</a
+          >
+          <a href="{{ url_for('settings') }}"
+            ><i class="fas fa-cog"></i> Settings</a
+          >
+          <a href="{{ url_for('logout') }}"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
+          <button id="themeToggle" class="focus:outline-none">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="header-section container">
+      <h1>Extract Text from Handwritten Documents</h1>
+      <p class="subtitle">
+        Transform your handwritten notes or scanned documents into editable,
+        searchable text with ease. Our advanced OCR technology supports multiple
+        languages, offers instant translation, and ensures your data is secure
+        with business-grade encryption.
+      </p>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="container">
+      <div class="upload-section">
+        <div class="drop-zone" id="dropZone">
+          <i class="fas fa-cloud-upload-alt text-4xl mb-4"></i>
+          <p>Drag & Drop Your Documents Here</p>
+          <p class="text-sm">or</p>
+          <form
+            action="/"
+            method="post"
+            enctype="multipart/form-data"
+            id="uploadForm"
+          >
+            <input
+              type="file"
+              name="files"
+              multiple
+              accept=".png,.jpg,.jpeg"
+              class="hidden"
+              id="file-input"
+            />
+            <label
+              for="file-input"
+              class="text-a68a64 cursor-pointer hover:text-eceeea"
+              >Upload Your File</label
+            >
+          </form>
+          <div class="mt-4 text-sm" id="uploadTip">
+            <p>
+              <i class="fas fa-lightbulb"></i> Tip: For best results, use clear,
+              well-lit images!
+            </p>
+          </div>
+          <div class="mt-4" id="previewContainer" style="display: none">
+            <img
+              src
+              alt="Image Preview"
+              class="max-w-xs rounded"
+              id="previewImage"
+            />
+            <button
+              class="text-sm text-a68a64 mt-2 hover:text-eceeea hidden"
+              id="fullscreenButton"
+            >
+              View Full Screen
+            </button>
+            <div class="progress-container">
+              <div class="progress-bar" id="uploadProgress"></div>
+              <span class="progress-text" id="progressText">0%</span>
+            </div>
+          </div>
+          <div
+            class="flex justify-center gap-4 mt-4"
+            id="buttonGroup"
+            style="display: none"
+          >
+            <button class="button" id="uploadButton">Upload</button>
+            <button class="button" id="cancelButton">Cancel</button>
+          </div>
+          <p class="text-red-500 mt-2 hidden" id="errorMessage"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- How-To Section -->
+    <div class="section container">
+      <h2 class="text-2xl font-bold text-center mb-8">
+        How to Convert Your Documents
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="feature-card">
+          <svg
+            class="h-12 w-12 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6H16a5 5 0 014 8v6a2 2 0 01-2 2H7z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v3m0 0v3m0-3h3m-3 0H9"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">1. Upload</h3>
+          <p>Upload or drag & drop your documents.</p>
+        </div>
+        <div class="feature-card">
+          <svg
+            class="h-12 w-12 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">2. Convert</h3>
+          <p>OCR extracts and converts text.</p>
+        </div>
+        <div class="feature-card">
+          <svg
+            class="h-12 w-12 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">3. Download</h3>
+          <p>Download your editable file.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="section container">
+      <h2 class="text-2xl font-bold text-center mb-8">
+        Why Choose Handwritten OCR
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="feature-card">
+          <svg
+            class="h-10 w-10 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 11c0-1.1.9-2 2-2s2 .9 2 2-2 5-2 5m-8-5c0-1.1.9-2 2-2s2 .9 2 2-2 5-2 5m4-10v2m0 12v2m-8-10H4m16 0h-2"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">Safe</h3>
+          <p>Business-grade encryption for security.</p>
+        </div>
+        <div class="feature-card">
+          <svg
+            class="h-10 w-10 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7m-9-4h-2m0 0H5a2 2 0 00-2 2v2m9-4h2m0 0h2a2 2 0 012 2v2"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">Business-Oriented</h3>
+          <p>Integrates with your systems.</p>
+        </div>
+        <div class="feature-card">
+          <svg
+            class="h-10 w-10 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-9a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">Quick</h3>
+          <p>Fast extraction for busy teams.</p>
+        </div>
+        <div class="feature-card">
+          <svg
+            class="h-10 w-10 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11 14.828 7.172 11a2 2 0 112.828-2.828l3.586 3.586z"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">Easy Edit</h3>
+          <p>User-friendly editing tools.</p>
+        </div>
+        <div class="feature-card">
+          <svg
+            class="h-10 w-10 text-a68a64 mx-auto mb-4 feature-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 5h12M9 3v2m1.5 11H15m-9 0h6m-3-6h6m-3 0H3"
+            ></path>
+          </svg>
+          <h3 class="font-semibold text-lg">Instant Translation</h3>
+          <p>Real-time multi-language support.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="section container">
+      <h2 class="text-2xl font-bold text-center mb-8">What Our Users Say</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="testimonial-card">
+          <i class="fas fa-quote-left text-a68a64 text-2xl mb-4"></i>
+          <p>
+            "This tool saved me hours of typing up my old notes. The accuracy is
+            incredible!"
+          </p>
+          <p class="mt-4 font-semibold">- Sarah M., Teacher</p>
+        </div>
+        <div class="testimonial-card">
+          <i class="fas fa-quote-left text-a68a64 text-2xl mb-4"></i>
+          <p>
+            "Perfect for digitizing my team's handwritten reports. Fast and
+            secure."
+          </p>
+          <p class="mt-4 font-semibold">- James R., Manager</p>
+        </div>
+        <div class="testimonial-card">
+          <i class="fas fa-quote-left text-a68a64 text-2xl mb-4"></i>
+          <p>
+            "I love the translation feature—makes my research so much easier!"
+          </p>
+          <p class="mt-4 font-semibold">- Priya K., Student</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="section container">
+      <h2 class="text-2xl font-bold text-center mb-8">
+        Frequently Asked Questions
+      </h2>
+      <div class="max-w-800 mx-auto">
+        <div class="faq-item">
+          <h3 class="font-semibold text-lg">
+            What file formats are supported?<i
+              class="fas fa-chevron-down faq-arrow"
+            ></i>
+          </h3>
+          <p class="faq-answer">
+            We support PNG, JPG, and JPEG files for handwritten text
+            recognition.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3 class="font-semibold text-lg">
+            How accurate is the OCR?<i
+              class="fas fa-chevron-down faq-arrow"
+            ></i>
+          </h3>
+          <p class="faq-answer">
+            Our OCR achieves high accuracy with clear handwriting, though
+            results may vary with poor lighting or messy scripts.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h3 class="font-semibold text-lg">
+            Is my data secure?<i class="fas fa-chevron-down faq-arrow"></i>
+          </h3>
+          <p class="faq-answer">
+            Yes, we use business-grade encryption to protect your files during
+            upload and processing.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supported Formats & Languages Section -->
+    <div class="section container">
+      <h2 class="text-2xl font-bold text-center mb-8">
+        Supported Formats & Languages
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="feature-card">
+          <i class="fas fa-file-image text-a68a64 text-4xl mb-4"></i>
+          <h3 class="font-semibold text-lg">Image Formats</h3>
+          <p>PNG, JPG, JPEG</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-globe text-a68a64 text-4xl mb-4"></i>
+          <h3 class="font-semibold text-lg">Languages</h3>
+          <p>English, Spanish, French, German, Hindi, and more</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call-to-Action Banner -->
+    <div class="container">
+      <div class="cta-banner">
+        <h2 class="text-2xl font-bold text-white mb-4">
+          Ready to Get Started?
+        </h2>
+        <p class="text-white mb-4">
+          Sign up today for free or explore our premium features for businesses.
+        </p>
+        <a href="{{ url_for('signup') }}" class="button bg-white text-a68a64"
+          >Join Now</a
+        >
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p class="font-bold"><i class="fas fa-pen-nib"></i> Handwritten OCR</p>
+        <div class="flex flex-wrap justify-center gap-6 mt-4">
+          <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+          <a href="https://facebook.com" target="_blank"
+            ><i class="fab fa-facebook"></i> Facebook</a
+          >
+          <a href="https://github.com" target="_blank"
+            ><i class="fab fa-github"></i> GitHub</a
+          >
+          <a href="https://instagram.com" target="_blank"
+            ><i class="fab fa-instagram"></i> Instagram</a
+          >
+          <a href="https://twitter.com" target="_blank"
+            ><i class="fab fa-twitter"></i> Twitter</a
+          >
+          <a
+            href="/cdn-cgi/l/email-protection#95e6e0e5e5fae7e1d5fdf4fbf1e2e7fce1e1f0fbfaf6e7bbf6faf8"
+            ><i class="fas fa-envelope"></i> Gmail</a
+          >
+          <a href="https://linkedin.com" target="_blank"
+            ><i class="fab fa-linkedin"></i> LinkedIn</a
+          >
+          <a href="/contact"><i class="fas fa-phone"></i> Contact Us</a>
+        </div>
+        <p class="text-sm mt-4">
+          Developed by Bhuwan Shrestha, Alen Varghese, Shubh Soni, and Dev
+          Patel.<br />© 2025 Handwritten OCR. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Fullscreen Overlay -->
+    <div
+      class="fixed inset-0 bg-black bg-opacity-75 hidden"
+      id="fullscreenOverlay"
+    >
+      <button id="closeFullscreenButton" aria-label="Close Fullscreen">
+        ×
+      </button>
+      <img
+        src
+        alt="Fullscreen Image"
+        class="max-w-full max-h-full m-auto"
+        id="fullscreenImage"
+      />
+    </div>
+
+    <!-- JavaScript -->
+    <script
+      data-cfasync="false"
+      src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+    ></script>
+    <script>
+      const dropZone = document.getElementById("dropZone");
+      const fileInput = document.getElementById("file-input");
+      const uploadForm = document.getElementById("uploadForm");
+      const previewContainer = document.getElementById("previewContainer");
+      const previewImage = document.getElementById("previewImage");
+      const buttonGroup = document.getElementById("buttonGroup");
+      const uploadButton = document.getElementById("uploadButton");
+      const cancelButton = document.getElementById("cancelButton");
+      const errorMessage = document.getElementById("errorMessage");
+      const fullscreenButton = document.getElementById("fullscreenButton");
+      const fullscreenOverlay = document.getElementById("fullscreenOverlay");
+      const fullscreenImage = document.getElementById("fullscreenImage");
+      const closeFullscreenButton = document.getElementById(
+        "closeFullscreenButton"
+      );
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+      const uploadProgress = document.getElementById("uploadProgress");
+      const progressText = document.getElementById("progressText");
+
+      let selectedFiles = [];
+
+      // Ensure light mode and hidden overlay on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        body.classList.add("light-mode");
+        // Explicitly ensure fullscreen overlay is hidden on load
+        fullscreenOverlay.classList.add("hidden");
+        // Hide fullscreen button by default
+        fullscreenButton.style.display = "none";
+      });
+
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        body.classList.toggle("dark-mode");
+        themeToggle.querySelector("i").classList.toggle("fa-sun");
+        themeToggle.querySelector("i").classList.toggle("fa-moon");
+      });
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+
+      dropZone.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        handleFiles(e.dataTransfer.files);
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        handleFiles(e.target.files);
+      });
+
+      function handleFiles(files) {
+        selectedFiles = Array.from(files).filter((file) =>
+          file.type.startsWith("image/")
+        );
+        if (selectedFiles.length > 0) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = "block";
+            buttonGroup.style.display = "flex";
+            errorMessage.classList.add("hidden");
+            // Show fullscreen button only after image is loaded
+            fullscreenButton.style.display = "block";
+          };
+          reader.readAsDataURL(selectedFiles[0]);
+        } else {
+          errorMessage.textContent = "Please select a valid image file.";
+          errorMessage.classList.remove("hidden");
+        }
+      }
+
+      uploadButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (selectedFiles.length > 0) {
+          uploadProgress.style.width = "0%";
+          progressText.textContent = "0%";
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 10;
+            uploadProgress.style.width = `${progress}%`;
+            progressText.textContent = `${progress}%`;
+            if (progress >= 100) {
+              clearInterval(interval);
+              const dataTransfer = new DataTransfer();
+              selectedFiles.forEach((file) => dataTransfer.items.add(file));
+              fileInput.files = dataTransfer.files;
+              uploadForm.submit();
+            }
+          }, 200);
+        }
+      });
+
+      cancelButton.addEventListener("click", () => {
+        selectedFiles = [];
+        previewImage.src = "";
+        previewContainer.style.display = "none";
+        buttonGroup.style.display = "none";
+        errorMessage.classList.add("hidden");
+        fileInput.value = "";
+        uploadProgress.style.width = "0%";
+        progressText.textContent = "0%";
+        // Hide fullscreen button when canceling
+        fullscreenButton.style.display = "none";
+      });
+
+      fullscreenButton.addEventListener("click", () => {
+        if (previewImage.src) {
+          // Ensure an image is loaded
+          fullscreenImage.src = previewImage.src;
+          fullscreenOverlay.classList.remove("hidden");
+        }
+      });
+
+      closeFullscreenButton.addEventListener("click", () => {
+        fullscreenOverlay.classList.add("hidden");
+      });
+
+      // FAQ Toggle with Arrow Rotation
+      const faqItems = document.querySelectorAll(".faq-item");
+      faqItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          const answer = item.querySelector(".faq-answer");
+          const arrow = item.querySelector(".faq-arrow");
+          answer.style.display =
+            answer.style.display === "block" ? "none" : "block";
+          item.classList.toggle("active");
+        });
+      });
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'91e85cf9aa40b0c1',t:'MTc0MTY2NzkxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

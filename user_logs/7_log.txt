@@ -1,0 +1,24 @@
+2025-03-31 21:10:17 - Account Created - Username: leo, Email: ayan@gmail.com
+2025-03-31 21:10:22 - Login - IP: 127.0.0.1
+2025-03-31 21:10:24 - Viewed History
+2025-03-31 21:10:34 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 21:10:36 - Viewed History
+2025-03-31 21:10:38 - Viewed Settings Page
+2025-03-31 21:10:38 - Viewed Active Sessions
+2025-03-31 21:10:40 - Activity Log Downloaded
+2025-03-31 21:10:59 - Viewed Contact Page
+2025-03-31 21:11:05 - Viewed About Page
+2025-03-31 21:11:09 - Viewed History
+2025-03-31 21:12:11 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 21:13:26 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 21:15:58 - Viewed References Page
+2025-03-31 21:20:07 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 21:20:11 - File Downloaded - Format: txt, Filename: dfgvsdf
+2025-03-31 21:20:16 - Translation - Language: nl
+2025-03-31 21:20:18 - File Downloaded - Format: txt, Filename: sdfdsf
+2025-03-31 21:20:24 - Rating Submitted - Rating: 4/5 stars
+2025-03-31 21:30:02 - OCR Performed - File: learner-text-cropped-square.jpg
+2025-03-31 21:30:11 - Viewed History
+2025-03-31 21:30:13 - Viewed About Page
+2025-03-31 21:30:17 - Viewed About Page
+2025-03-31 21:30:19 - Viewed Contact Page
