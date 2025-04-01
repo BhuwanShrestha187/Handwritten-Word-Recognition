@@ -1,82 +1,74 @@
-/* static/css/style.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f5f5f5;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.light-mode {
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 1200px;
     margin: 0 auto;
-    background-color: white;
     padding: 20px;
+}
+
+.box {
+    border: 2px solid #000;
+    padding: 20px;
+    margin: 10px 0;
+    background: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-h1 {
-    text-align: center;
-    color: #333;
+.dark-mode .box {
+    background: #2a2a2a;
+    border-color: #555;
 }
 
-.upload-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-}
-
-.file-input {
-    display: none;
-}
-
-.file-label {
-    padding: 10px 20px;
-    background-color: #f0f0f0;
-    border: 2px dashed #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.file-label:hover {
-    background-color: #e0e0e0;
-}
-
-.upload-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+button, input[type="submit"] {
+    background: #007bff;
+    color: #fff;
     border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
 
-.upload-button:hover {
-    background-color: #45a049;
+button:hover, input[type="submit"]:hover {
+    background: #0056b3;
 }
 
-.alert {
+textarea {
+    width: 100%;
+    min-height: 100px;
     padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    text-align: center;
-}
-.file-display {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
-#file-name-display {
-    color: #333;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+nav {
+    background: #007bff;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+nav a {
+    color: #fff;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.dark-mode nav {
+    background: #003087;
 }
